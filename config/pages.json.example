@@ -1,0 +1,10 @@
+{
+  "example-page": {
+    "path": "example",
+    "key": "thisisakey"
+  },
+  "second-example": {
+    "path": "secondexample",
+    "key": "thisisanotherkey"
+  }
+}
