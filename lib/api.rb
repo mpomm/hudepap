@@ -4,6 +4,10 @@ require_relative "check_params"
 require_relative "deployment"
 
 class Api < Sinatra::Base
+  get "/" do
+    "Hello World"
+  end
+
   get '/api/deploy' do
     @blog_title = params["title"]
     @hash_key = params["key"]
@@ -39,4 +43,6 @@ class Api < Sinatra::Base
     deploy = Deployment.new
   end
 
+  run!
 end
+
