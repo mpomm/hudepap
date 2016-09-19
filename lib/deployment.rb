@@ -1,4 +1,4 @@
-require "minigit"
+require 'minigit'
 
 class Deployment
   def initialize(blog_title, hash_key, pages)
@@ -8,10 +8,10 @@ class Deployment
   end
 
   def deploy!
-    path = pages[@blog_title]["path"]
+    path = pages[@blog_title]['path']
     git = MiniGit.new(path)
     git.capturing.pull :f
     # hugo to rebuild static html pages
-    "Deployment done"
+    'Deployment done'
   end
 end
