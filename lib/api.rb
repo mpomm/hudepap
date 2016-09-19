@@ -1,7 +1,7 @@
-require "json"
-require "sinatra/base"
-require_relative "check_params"
-require_relative "deployment"
+require 'json'
+require 'sinatra/base'
+require_relative 'check_params'
+require_relative 'deployment'
 
 class Api < Sinatra::Base
   get '/' do
@@ -12,18 +12,19 @@ class Api < Sinatra::Base
     'test'
   end
 
-  get '/api/deploy/:title/:key' do
-    blog_title = params["title"]
-    hash_key = params["key"]
+  get '/api/deploy/:title' do
+    blog_title = params['title']
+    request.body.rewind
+    hash_key = request.body.read
     check = CheckParams.new(blog_title, hash_key, pages)
     return blog_not_present! unless check.blog_available?
-    return wrong_key! unless check.key_correct?
+    return wrong_key! unless check.verify_signature
     deploy_blog
   end
 
   not_found do
     status 404
-    "page not found"
+    'page not found'
   end
 
   def pages
@@ -32,19 +33,18 @@ class Api < Sinatra::Base
   end
 
   def blog_not_present!
-    "blog not present"
+    'blog not present'
   end
 
   def wrong_key!
     status 403
-    "Key not allowed"
+    'Key not allowed'
   end
 
   def deploy_blog
-    deployment = Deployment.new(@blog_title,@hash_key,pages)
+    deployment = Deployment.new(@blog_title, @hash_key, pages)
     deployment.deploy!
   end
 
   run!
 end
-
